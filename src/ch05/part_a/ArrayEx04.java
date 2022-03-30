@@ -18,7 +18,8 @@ public class ArrayEx04 {
         System.out.println(num);
 
         // number의 인덱스6 위치에 3개를 복사
-        System.arraycopy(abc, 0, num, 6, 3);
-        System.out.println(num);
+        System.arraycopy(abc, 0, num, 6, 3); // 0부터 시작임 그래서 destPos가 6이라고해서 6번째가아니라 실제로 7번째임
+        System.out.println(num);   // 만약 abc와 num의 값을 초기화하고싶으면 abc = new char[] { 'A', 'B', 'C', 'D'};
+                                   //                                   num = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}; 이렇게해주면됨
     }
 }
