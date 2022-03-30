@@ -1,4 +1,4 @@
-package ch05.a;
+package ch05.part_a;
 
 import java.util.*;
 

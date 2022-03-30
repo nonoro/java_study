@@ -62,3 +62,14 @@ int[] score = { 50, 60, 70, 80, 90}; // 이렇게도 가능
 ```
 => int add메서드를 사용할시 new 타입[] 을 생략할 수 없다
 
+#### 6. 배열의 복사
+=> 배열의 복사는 for문과 System.arraycopy()가 있는데 for보단 System.arraycopy()을 사용하는게 더 효율적이다.
+ex)
+```
+for(int i=0; i < num.length; i++) { newNum[i] = num[i]; }
+                   |
+                   v
+System.arraycopy(num, 0, newNum, 0, num.length);
+              num[0]에서  newNum[0]으로  num.length개의 데이터를 복사                                           
+```
+
