@@ -75,7 +75,7 @@ class Buyer02 {                 // 고객, 물건을 사는 사람
 
 
             sum += item[i].price;
-            itemList += item[i] + ", ";
+            itemList += item[i] + ", ";   //  item[i] = item[i].toString
         }
         System.out.println("구입하신 물품의 총금액은 " + sum + "만원입니다.");
         System.out.println("구입하신 제품은 " + itemList + "입니다.");
@@ -84,7 +84,7 @@ class Buyer02 {                 // 고객, 물건을 사는 사람
 
 class PolyArgumentTest02 {
     public static void main(String[] args) {
-        Buyer buyer02 = new Buyer();
+        Buyer02 buyer02 = new Buyer02();
 
         buyer02.buy(new Tv02());
         buyer02.buy(new Computer02());
