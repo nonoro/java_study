@@ -55,7 +55,7 @@ class Dropship extends AirUnit implements Repairable {
     }
 
     public String toString() {
-        return "Dropshop";
+        return "Dropship";
     }
 }
 

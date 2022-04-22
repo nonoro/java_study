@@ -1,6 +1,6 @@
 package ch07.polymorphism05;
 
-class Parent1 {
+class Parent01 {
     int x = 100;
 
     void method() {
@@ -8,13 +8,13 @@ class Parent1 {
     }
 }
 
-class Child1 extends Parent1 {
+class Child01 extends Parent01 {
     }
 
 class BindingTest02 {
     public static void main(String[] args) {
-        Parent1 p = new Child1();
-        Child1 c = new Child1();
+        Parent01 p = new Child01();
+        Child01 c = new Child01();
 
         System.out.println("p.x = " + p.x);
         p.method();

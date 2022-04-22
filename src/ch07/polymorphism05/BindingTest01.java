@@ -26,6 +26,7 @@ class BindingTest01 {
 
         System.out.println("c.x = " + c.x);
         c.method();
-    }
-}
 
+    }
+
+}
