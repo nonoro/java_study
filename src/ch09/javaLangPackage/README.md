@@ -74,7 +74,7 @@
         1) 문자열 리터럴로 문자열을 만들면 하나의 문자열을 여러 참조변수가 공유한다 따라서 주소가 같음(문자열 리터럴은 이미 존재하는 것을 재사용하는 것)
         2) new 연산자 사용시 항상 새로운 객체가 만들어짐 따라서 주소가 다름
         * 그런데 문자열은 어짜피 내용을 변경불가임 그래서 굳이 new를 이용해서 같은 내용의 문자열을 여러개를 만들 필요가 없음
-        * 문자열의 같고 다름을 뵤시할 떄는 equals를 써야됨 등가비교 연산자 == 는 주소비교이고 equals는 내용비교임 따라서 어떨땐 true고 어떨땐 false라서 
+        * 문자열의 같고 다름을 표시할 떄는 equals를 써야됨 등가비교 연산자 == 는 주소비교이고 equals는 내용비교임 따라서 어떨땐 true고 어떨땐 false라서 
           문자열을 비교할땐 항상 equals를 이용해서 비교하기
 
 #### 3) 문자열 리터럴(리터럴 = 상수)
@@ -134,4 +134,139 @@
     - 문자열을 숫자로 바꾸는 방법(valueOf)
         int i = Integer.parseInt("100");    //  "100"을 100으로 변환하는 방법1 old한 방법 얘는 parse 뒤에 기본형에따라 달라짐
         int i2 = Integer.valueOf("100");    //  "100"을 100으로 변환하는 방법2 new방법 얘는 그냥 앞에 타입만 맞추고 뒤엔 뭐든 valuOf하면됨 이거쓰기
-        Integer i2 = Integer.valueOf("100");    // 원래는 valueOf 반환 타입이 Integer 참조형임 근데 int 기본형으로 써도됨 
+        Integer i2 = Integer.valueOf("100");    // 원래는 valueOf 반환 타입이 Integer 참조형임 근데 int 기본형으로 써도됨
+
+### 9. StringBuffer클래스와 StringBuilder클래스
+
+#### 1) StringBuilder클래스
+    - String처럼 문자형 배열(char[])을 내부적으로 가지고 있다.
+    - 문자열을 저장 & 다루기위한 클래스이다.
+    - String과 달리 내용을 변경할 수 있다(mutable)
+        StringBuffer sb = new StringBuffer("abc"); //    이렇게하면 'a' 'b' 'c' 배열이 생성이된다
+        sb.append("123");                          //    이렇게하면 'a' 'b' 'c' '1' '2' '3' abc배열 옆에 123 이 추가된다
+
+#### 2) StringBuffer의 생성자
+    - 배열은 길이 변경불가. 공간이 부족하면 새로운 배열 생성해야한다.
+        a) 새로운 배열 생성 보통 2배로함
+        b) 내용복사
+        c) 참조변경
+    - StringBuffer는 저장한 문자열의 길이를 고려해서 적절한 크기로 생성해야한다.
+
+#### 3) StringBuffer의 변경
+    - StringBuffer는 String과 달리 내용 변경이 가능하다
+        append() : 끝에 문자열 추가
+        delete() : 삭제
+        insert() : 삽입
+        => 이 메서드 들의 반환타입은 StringBuffer 따라서
+            StringBuffer sb = new StringBuffer("abc");
+            sb.append("123");          ------>          sb.append("123").append("ZZ");
+            sb.append("ZZ");                                   sb       이 두 문장을 위에 하나로 변경가능
+            StringBuffer  
+    - StringBuffer는 equals()가 오버라이딩되어있지 않다(주소비교) (this == obj) 이렇게 되어있다. 그래서 내용이 같아도 주소가달라서 equals결과가 false가뜸
+      따라서 StrinBuffer을 String으로 변환 후에 equals()로 비교해야 한다.
+            String s = sb.toSTring();               // sb를 String으로 변환
+            String s2 = sb2.toString();
+            
+            System.out.println(s.equals(s2));       //  true
+
+#### 4) StringBuffer의 생성자와 메서드
+    - 기본생성자 StringBuffer()일 경우 기본 16문자를 담을 수 있는 캐릭터배열이 만들어짐
+    - bufferSize = StringBuffer인스턴스 배열의 총 길이
+    - stringSize = 배열에 담긴 문자열의 길이
+    - apend는 맨뒤에 차례대로 넣는다.
+    - insert는 위치를 지정해서 넣을 수 있다.
+        예시)     StringBuffer sb = new StringBuffer("0123456")
+                 sb.insert(4, '.'); 
+                 // 이 경우 4 뒤에 . 이 들어간다 무조건 boolean이든 float 이든 앞에 x자리쪽 인덱스 뒤에 y자리쪽 문자열이 들어감 
+                 // 따라서 "0123.456
+    - delete는 StringBuffer(int start, int end) 인데 여기서 end지점의 인덱스는 빼고 삭제다
+        예시)     StringBuffer sb = new StringBuffer("123456789");                         
+                 StringBuffer sb2 = sb.delete(3, 6); 
+                // 이 경우 3번째에 위치한 4부터 ~ 6번째인 7까지 없어지는게아니라 끝에는 빼고 4~6까지 없어진다
+                // 대부분의 경우가 모두 end자리 인덱스는 제외하고임 replace도 마찬가지
+                // 따라서 "123789" 출력
+    - setCharAt(int index, char ch) : 인덱스 위치에 있는 문자를 바꾼다.
+    - trim() : 양 끝의 빈 공백을 없애줌
+    - setLength() : 지정된 길이로 문자열의 길이를 변경한다. 길이를 늘리는 경우 빈 공간은 \u0000로 채워져 공백으로 출력되고 주로 trim()과 함께 사용하여 공백을 없앤다
+    - toString() : StrinBuffer를 String으로 바꿀때 사용한다
+    - substring(int start, int end) : start부터 end전까지의 지정된 길이의 문자를 출력하고 나머지는 삭제한다  start만 입력할 경우 start~맨끝 까지 출력한다.
+    - replace(int start, int end, String str) : (시작, 끝, 교체할 문자)
+
+#### 5) StringBuilder
+    - StringBuffer와 거의 똑같은데 StringBuffer는 동기화되어 있지만(동기화 되어있다 = 멀티 쓰레드에 안전하다.(thread=safe) StringBuilder는 동기화되어 있지않다
+        < 쓰레드 : 일꾼 >
+        * 싱글쓰레드 : 한번에 1개 작업 ( 지금까지 작성한 것들은 전부 싱글 쓰레드 )
+                ex) 카톡에서 파일을 다운로드 할 경우 파일을 다운로드 하는동안 채팅을 못하는 경우, 다운로드하던가 채팅하던가 둘 중 하나밖에 못함
+          멀티쓰레드 : 한번에 n개 작업
+                ex) 파일 다운로드와 채팅등의 여러작업을 동시에 할 수 있다.
+                * 여렇이 같이 작업하다보니 데이터를 공유하는데 이걸 누가 작업하는 중에 다른 사람이 건드릴 수 있다 그걸 막아주는게 동기화이다 
+                  따라서 동기화 = 데이터를 보호
+    - 멀티 쓰레드 프로그램이 아닌 경우, 동기화는 불필요한 성능저하    
+      이럴 떈 StringBuffer대신 StringBuilder(싱글 쓰레드 프로그램)를 사용하면 성능 향상 ( 근데 거의 Buffer를 씀 )
+            예시) 만약 StringBuffer -> StringBuilder 로 바꿀경우 다른거(메서드 등) 하나도 건들지 않고 그냥 순수 클래스이름만 StringBuffer를 StringBuilder로만 바꾸면됨
+
+### 10. Math클래스
+    - 수학관련 static메서드의 집합
+    - round()로 원하는 소수점 아래 세 번째 자리에서 반올림하기
+    - ex) Math.round(), Math.random() 등
+    - abs() : 앱솔루트 : 절대값 반환 : 양수 -> 양수, 음수 -> 양수
+    - ceil() : 올림
+    - floor() : 버림, 음수일때 조심 음수는 올라감 숫자가( 클수록 작아서 )
+    - max() : 둘 중 큰거 반환
+    - min() : 둘 중 작은거 반환
+    - rint : 반올림 : roundeven : 짝수 반올림 올림했을때 짝수면 올림 아니면 내림 : 오차가 round보다 적다
+    - round : 반올림 : 우리가 알고있는 일반 반올림 : HALF_UP
+
+#### 1. 예외를 발생시키는 메서드
+    - 메서드 이름에 Exact가 포함된 메서드 : 이들은 정수형간의 연산에서 발생할 수 있는 오버플로우를 감지하기 위한 것이다.
+    - addExact(), subtractExact() 등 Exact가 붙은 메서드들은 오버플로우 발생시 예외를 발생시킨다
+    
+### 11. 래퍼(wrapper) 클래스
+    - 8개의 기본형을 객체로 다뤄야할 때 사용하는 클래스.
+    - 기본형값을 감싸는 클래스
+    - int와 char을 제외하면 기본형의 래퍼클래스는 각각의 기본형의 이름의 앞글자를 대문자로 한 것이다. 
+        int -> Interger
+        char -> Character
+    - 래퍼 클래스들은 모두 equals()가 오버라이딩되어있다.
+    - 래퍼 클래스들은 모두 toString()이 오버라이딩되어있다.
+    - MAX_VALUE, MIN_VALUE, SIZE, BYTES, TYPE등의 static상수를 공통적으로 가지고있다.
+
+#### 1. Number클래스
+    - 모든 숫자 래퍼 클래스의 조상(Biglnteger(아주 큰 정수) - long으로 표현할 수 없는걸 표현, BigDecimal(아주 큰 실수) - Double로 표현할 수 없는걸 표현 얘내는 따로 안배웠었음)
+    - 추상클래스이다.
+    - 래퍼 객체의 값을 -> 기본형으로 바꿀때 쓰는 메서드들을 가지고 있다.
+        new Integer(100) -------------------> 100 
+           Integer           intValue()       int
+
+#### 2. 문자열을 숫자로 변환하기
+    - 문자열을 숫자로 변환하는 다양한 방법
+        int     i = new Integer("100").intValue();  
+        int     i2 = Integer.parseInt("100")        // 주로 이 방법을 많이 사용 - 문자열을 인티져로 바꾸는 가장 많이 쓰는 방법
+        int(Intger로 써도됨)     i3 = Integer.valueOf("100")
+    * 문자열 -> 기본형 : 해당기본형타입(앞글자 대문자).parse해당기본형타입(앞글자 대문자)() or 해당기본형타입(앞글자 대문자).ValueOf()
+                        byte b = Byte.parseByte("100");
+    * 문자열 -> 래퍼클래스 : 해당기본형타입(앞글자 대문자).
+                        Byte b = Byte.valueOf("100")
+                        Byte b = new Byte("100");
+    * 래퍼클래스 -> 문자열 : 
+                        Byte b = Byte.toString("100"); 
+                        String str = b.toString()
+    - n진법의 문자열을 숫자로 변환하는 방법
+        int i4 = Intger.parseInt("100", 2);         //  100(2) -> 4   100을 2진수로 바꾼값 = 4
+        int i5 = Intger.parseInt("100", 8);         //  100(8) -> 64   100을 8진수로 바꾼값 = 64
+        int i6 = Intger.parseInt("100", 16);        //  100(16) -> 256   100을 16진수로 바꾼값 = 256
+        int i7 = Intger.parseInt("FF", 16);         //  FF(16) -> 255   FF을 16진수로 바꾼값 = 255
+        int i8 = Intger.parseInt("FF");             //  NumberFormatException발생, ("", 여기 아무것도 안쓰면 자동으로 10이 있다고 보고 10진수로 값을 바꿈) 
+                                                    //  근데 얘는 FF를 10진수에는 F가없어서 에러발생
+
+#### 3. 오토박싱 & 언박싱(autoboxing & unboxing)
+    - 기본형의 값을 객체로 자동변환하는 것을 오토박싱, 그 반대는 언박싱
+    - int(기본형)  ------> Integer(참조형)
+           오토박싱(기본형 값을 래퍼클래스 값으로 자동으로 바꿔줌)
+            ArrayList<Integer> list = new ArrayList<Integer>();
+            list.add(10);           //  오토박싱. 10 -> new Integer(10) 으로 자동으로 바꿔줌 
+            원래는 list.add(new Integer(10)) 이렇게 해야되는데 자동으로 10만 입력해도 이렇게 바꿔줌 
+    - int(기본형)  <------ Integer(참조형)
+           언박싱(래퍼클래스 값을 기본형 값으로 자동으로 바꿔줌)
+            int value = list.get(0);    //  언박싱. new Integer(10) -> 10;
+            얘도 마찬가지로 자동으로 10으로 바꿔줌
