@@ -120,3 +120,11 @@ date.roll(Calendar.MONTH, -8);  // 월(MONTHE)에 -8을 뺀다 : 2020년 12월 3
 
 - roll()과 add() 메서드 둘다 먄악 1월 31 일 일때 월필드를 1 증가시켜 2월로 만들면 2월은 28일이 말일이기 때문에 자동으로 2월의 말일인 28일로 바뀐다.
 * Math.abs(); 절대값 반환 메서드
+
+- boolean isLeapYear(int year) : 매개변수 year가 윤년이면 true를 그렇지 않으면 false를 반환한다.
+- int dayDiff(int y1, int m1, int d1, int y2, int m2, int d2) : 두 날짜간의 차이를 일단위로 반환한다.
+- int getDayOfWeek(int year, int month, int day) : 지정한 날짜의 요일을 반환한다.(1~7, 1이 일요일)
+- String convertDayToDate(int day) : 일단위의 값을 년월일의 형태의 문자열로 변환하여 반환한다.
+- int convertDateToDay(int year, int month, int day) : 년월일을 입력받아서 일단위로 변환한다.
+- 두 날짜의 차이를 구하려면 일단위로 변환한 다음 두 값을 서로 빼기만 하면 된다.
+- 요일을 구하는 것은 일단위로 바꾼 다음에 요일의 개수인 7로 나누고 요일이 1 부터 시작하기 위해서 1을 더한다. 1을 더하지 않고 요일의 범위를 0~6까지 해도 되지만 Calendar에서 요일범위가 1~7이기 때문에 동일하게 처리한다.
