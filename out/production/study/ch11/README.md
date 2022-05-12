@@ -185,6 +185,82 @@
 - 큐의 활용 예 : 최근사용문서, 인쇄작업 대기목록, 버퍼(buffer)
 
 * PriorityQueue 
-  - Queue인터페이스의 구현체 중의 하나로, 저장한 순서에 관계없이 우선순위가 높은 것부터 꺼내게 된다는 특징이 있다
+  - Queue인터페이스의 구현체 중의 하나로, 저장한 순서에 관계없이 우선순위가 높은 것부터 꺼내게 된다는 특징이 있다. 우선순위는 숫자가 작을수록 높음
   - null은 저장할 수 없다.
   - 저장공간으로 배열을 사용하며 각 요소를 힙이라는 자료구조의 형태로 저장한다.
+
+* Deque(Double-Ended Queue)
+  - 한 쪽 끝으로만 추가/삭제 할 수 있는 Queue와 달리 Dequq(덱 or 디큐)은 양쪽 끝에 추가/삭제가 가능하다.
+  - Deque는 스택과 큐를 하나로 합쳐놓은 것과 같으며 스택으로 사용할 수도 있고, 큐로 사용할 수도 있다.
+
+#### 10) Iterator, Listlterator(양방향), Enumeration(old버전)
+- 컬렉션에 저장된 데이터를 접근(읽기)하는데 사용되는 인터페이스
+- Iterator 핵심 메서드 (얘만 알면 됨)
+  - boolean hasNext() : 읽어올 요소가 남아있는지 확인
+  - Object next() : 다음 요소를 읽어 온다.
+- Enumeration은 Iterator의 구버전
+- Listlterator는 Iterator의 접근성을 향상시킨 것(단방향 -> 양방향), (잘안씀)
+
+##### Iterator
+- 컬렉션에 저장된 요소들을 읽어오는 방법을 표준화한 것
+- 컬렉션에 Iterator()를 호출해서 lterator를 구현한 객체를 얻어서 사용
+
+
+* 참조변수의 타입을 Collection타입으로 하는 이유 
+- Collection에없고 생성하고자하는 객체의 타입에만 있는 메서드를 사용하는게 아니라면 Collection타입의 참조변수로 선언하는 것이 좋다. 이유는 Collection인터페이스를 구현한 다른 클래스로 클래스를 변경시 선언문 하나만 변경하면 되고 나머지 아래 코드는 검토하지 않아도 되기 떄문이다.
+
+#### 11) Map과 iterator
+- Map에는 iterator()가 없다.
+- Map에서 iterator()를 호출하기 위해선 keySet(), entrySet(), values()를 호출해야한다.
+  ```
+        ex) Map map = new HashMap();
+        ...
+        Iterator it = map.entrySet().iterator();
+  ```               
+  
+#### 12) ListIterator와 Enumeration
+- Enumeration = Iterator의 구버전
+- ListLterator = Iterator에 양방향 조회기능추가(List인터페이스를 구현한 컬렉션에서만 사용가능)
+
+##### remove()
+- next()로 읽을때 읽으면서 원래 있던곳에 그 읽은 정보를 삭제하는것 
+- 얘는 만약 0, 1, 2, 3, 4 가 있을때 next() 로 0을 읽은다음 remove()를 하면 0을 삭제한다 그리고 또 next()로 1을 읽고 remove()를 하면 1을 삭제한다
+  결국 0, 1, 2, 3, 4를 담고있는 객체에는 2, 3, 4만 남게된다.
+                           
+#### 13) Arrays
+- 배열을 다루기 편리한 메서드(모두 static메서드임) 제공
+- 배열의 출력 - toString()
+- 배열의 복사 - copyOf(복사대상, 복사기준), copyOfRange(arr, from, to) - to는 범위에 안들어감, copy는 둘다 남는 공간은 0으로 채운다
+- 배열 채우기 - fill(arr, 9(이 값으로 배열을 채움)), setAll()
+- 배열의 정렬과 검색 -sort(), binarySearch()-얘 쓰려면 sort로 정렬한다음 쓸 수 있다, 인덱스를 반환 
+- 다차원 배열의 출력 - deepToString()
+- 다차원 배열의 비교 - deepEquals()
+- 배열을 list로 변환 - asList(Object...a) - 가변 매개변수 - list는 읽기전용 그래서 추가는 안됨 그래서 변경하고 싶으면 ArrayList에 추가하고자하는 객체의 값을 복사해서 넣고 새로운 객체를 만들어서 추가
+
+#### 14) Comparator와 Comparable
+- 객체 정렬에 필요한 메서드(정렬기준 제공)를 정의한 메서드
+  - Comparable 기본 정렬기준을 구현하는데 사용 : compareTo(): 주어진객체를 자신(this)과 비교
+  - Comparator 기본 정렬기준외에 다른 기준으로 정렬하고자 할 때 사용 : compare(정렬대상, 정렬기준) : 0-같다, 양수-왼쪽이크다, 음수-오른쪽이크다,
+  * 정렬 sort()
+    1) 두 대상 비교
+    2) 자리바꿈
+    3) 오름차순
+    4) 내림차순
+
+#### 15) HashSet - 순서X, 중복X
+##### HashSet
+- Set인터페이스를 구현한 가장 대표적인 컬렉션
+- 순서를 유지하려면, LinkedHashSet클래스를 사용하면 된다.
+- HashSet에 새로운 요소를 추가할 때는 add메서드나 addAll메서드를 사용하는데 만일 이미 HashSet에 저장되어 있는 요소와 중복된 요소를 추가하고자 한다면 false를 반환하는데 이러한 점을 이용해 컬렉션 내의 중복요들을 쉽게 제거할 수 있다.
+
+##### TreeSet - from ~ to
+- 범위 검색과 정렬에 유리한 컬렉션 클래스
+- HashSet보다 데이터 추가, 삭제에 시간이 더 걸림
+
+- HashSet정리
+  1) HashSet은 객체를 저장하기전에 기존에 같은 객체가 있는지 확인
+  2) 같은 객체가 없으면 저장하고, 있으면 저장하지 않는다.
+  3) boolean add(Object o)는 저장할 객체의 equals()와 hashCode()를 호출(중복을 확인하는 메서드)
+  4) equlas()와 hashCode()가 오버라이딩 되어 있어야함 
+     - 최근에는 hashCode() 메서드 사용시 return Objects.hash() 이렇게 바뀜
+  
