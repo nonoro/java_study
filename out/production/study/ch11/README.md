@@ -353,4 +353,40 @@
 - 변경불가(readOnly) 컬렉션 만들기 - unmodifiableXXX() : final과 비슷
 - 싱글톤 컬렉션 만들기 - singletonXXX() : 객체 1개만 저장
 - 한 종류(타입)의 객체만 저장하는 컬렉션 만들기 - checkedXXX() : 원래 컬렉션에는 모든 타입을 다 넣을 수 있음 근데 얘를 붙이면 한 타입만 됨
-- 
+
+### 19) 컬렉션 클래스 정리 & 요약
+```
+ArrayList       배열기반의 단점인 추가 삭제기능 향상        연결기반
+Vector           -------------------------->         LinkedList     ---------> Queue(FIFO구조)
+(Object[])   
+    |       \                                          /      \
+    |        \                                        /        \   
+    |         \                                      /          \
+    |          \                                    /            \
+    |           \                                  /              \
+    |            \        검색기능 향상            /                \      검색, 범위검색, 정렬기능 향상, 중위순회하면 정렬됨
+  stack           \                              /                  \
+                   \                            /                    \
+                          HashMap     (배열 + 링크드리스트)             TreeMap(최대 두개까지 연결할 수 있는 트리구조, 이진탐색트리)
+                          Hashtable                                        | 
+                        (Object, Object)                                   | 
+                           key   value                                     |     
+                          /    |      \                                    | 
+                         /     |       \                                   |   
+                        /      |        \  key의부분을 가지고 만든 것        |     key부분을 가지고 만든 것
+      파일의 읽기와     /       |         \                                 | 
+      쓰기가 용이      /        |          \                                |   
+                     /         |           \                               |                                                                        
+                 Properties    |        HashSet                         TreeSet
+            (String, String)   |             \   
+             key     value     |              \
+                               |               \
+                             LinkedHashMap      \
+                             순서유지 기능향상    \
+                                                LinkedHashSet
+                                                 순서유지 기능향상
+                                                
+                                                
+                                                
+                                                
+```
