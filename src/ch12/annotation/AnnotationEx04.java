@@ -5,7 +5,6 @@ import java.lang.annotation.*;
 @Deprecated
 @SuppressWarnings("1111")       //  유효하지 않은 애너테이션은 무시된다.
 @AnnotationEx04.TestInfo(testedBy = "aaa", testDate = @AnnotationEx04.DateTime(yymmdd = "160101", hhmmss = "235959"))
-
 class AnnotationEx04 {
 
     public static void main(String[] args) {
@@ -31,20 +30,26 @@ class AnnotationEx04 {
         }
     }   //  main의 끝
 
-        @Retention(RetentionPolicy.RUNTIME)     //  실행 시에 사용가능하도록 지정
-        @interface TestInfo {
-            int count()     default 1;
-            String testedBy();
-            String[] testTools()   default "JUnit";
-            TestType testType()     default TestType.FIRST;
-            DateTime testDate();
-        }
+    @Retention(RetentionPolicy.RUNTIME)     //  실행 시에 사용가능하도록 지정
+    @interface TestInfo {
+        int count() default 1;
 
-        @Retention(RetentionPolicy.RUNTIME)     //  실행시에 사용가능하도록 지정
-        @interface DateTime {
-            String yymmdd();
-            String hhmmss();
-        }
+        String testedBy();
 
-        enum TestType { FIRST, FINAL } }
+        String[] testTools() default "JUnit";
+
+        TestType testType() default TestType.FIRST;
+
+        DateTime testDate();
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)     //  실행시에 사용가능하도록 지정
+    @interface DateTime {
+        String yymmdd();
+
+        String hhmmss();
+    }
+
+    enum TestType {FIRST, FINAL}
+}
 

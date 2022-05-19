@@ -72,3 +72,91 @@ int getPriority() : 쓰레드의 우선순위를 반환한다.
   void setDaemon(boolean on) : 쓰레드를 데몬 쓰레드로 또는 사용자 쓰레드로 변경 매개변수 on을 true로 지정하면 데몬 쓰레드가 된다.
   ```
 * setDaemon(boolean on)은 반드시 start()를 호출하기 전에 실행되어야 한다. 그렇지 않으면 illegalThreadStateException이 발생한다.
+
+## 9. 쓰레드의 상태
+1) NEW : 쓰레드가 생성되고 아직 start()가 호출되지 않은 상태
+2) RUNNABLE : 실행 중 또는 실행 가능한 상태
+3) BLOCKED : 동기화블럭에 의해서 일시정지된 상태(lock이 풀릴 때까지 기다리는 상태)
+4) WAITING, TIMED_WATITING : 쓰레드의 작업이 종료되지는 않았지만 실행가능하지 않은 일시정지상태, TIMED_WAITING은 일시정지시간이지정된 경우를의미
+5) THEMINATED : 쓰레드의 작업이 종료된 상태
+- 정리) 줄을서서 자기차례때 자기작업이 끝나면 다시 뒤로 가서 줄을서거나 내가 할 작업이 다 끝나 stop()이 호출되어 소멸되거나, 이것을 무한반복하는것 
+- 쓰레드가 작업을 하다가 중간중간 멈출 때가 있다.(WAITING, BLOCKED상태)
+  - 쓰레드의 상태
+  1) suspend() : 일시정지
+  2) sleep() : 잠자기
+  3) wait() : 기다리게하는것
+  4) join() : 다른 쓰레드 기다리기
+  5) I/O block : 입출력 대기
+  
+- WAITING, BLOCKED상태에서 실행상태로 가기위한 메서드
+  1) time-out : 정해진 잠자는 시간이 끝나면 time-out으로 자동으로 나옴 sleep()과 연동
+  2) resume() : suspend()와 반대로 suspend()일때 다시 실행하고자 할 때 사용
+  3) notify() : WAIT와 한쌍
+  4) interrupt() : sleep()일때 정해진 시간이 다 지나기 전에 중간에 깨워서 실행
+
+## 10. 쓰레드의 실행제어
+- 쓰레드의 실행을 제어할 수 있는 메서드가 제공된다. 이 들을 활용해서 보다 효율적인 프로그램을 작성할 수 있다.
+  1) sleep : 지정된시간(천분의 1초)동안 쓰레드를 일시정지 시킨다, 지정한 시간이 지나고 나면 자동적으로 다시 실행대기상태가 된다. - static메서드(자기자신에게만 동작)
+     ```
+     static void sleep(long millis)
+     static void sleep(long millis, int nanos))
+     ```
+  2) join() : 다른 쓰레드가 작업하는걸 기다리는것
+  3) interrupt() : sleep()이나 join()을 꺠우거나 멈추게하는 것
+  4) stop() : 쓰레드 즉시종료
+  5) suspend() : 일시정지
+  6) resume() : 재개(suspend와 연동)
+  7) yield() : 다른 쓰레드에게 양보 - static메서드(자기자신에게만 동작)
+     ``` 
+     static void yiedl()
+     ```
+     
+- 위에서 static이 붙은 메서드는 sleep과 yield가 있다 얘내들은 자기 자신의 쓰레드에게만 적용가능하고 다른 쓰레드에 적용할 수 없다.
+
+## 11. sleep()
+- 현재 쓰레드를 지정된 시간동안 멈추게 한다.
+- static메서드라서 항상 현재 쓰레드에 대해서 동작을 한다.
+- 예외처리를 해야한다(InterruptedException이 발생하면 깨어남)
+  - 쓰레드가 멈추는 경우
+    1) time up (시간종료)
+    2) interrupted (누가 깨우는 것)
+- 특정 쓰레드를 지정해서 멈추게 하는 것은 불가능하다.
+
+## 12. interrupt()
+- 대기상태(WAITING)인 쓰레드를 실행대기 상태(RUNNABLE)로 만든다.
+- 진행 중인 쓰레드의 작업이 끝나기 전에 취소시켜야 할 때 사용 (파일 다운로드 할 때 중간에 취소버튼을 눌럿을 때 interrupt가 호출되어 정지됨)
+- interrupted는 static메서드임 이거 중요!!! 
+
+## 13. suspend(), resume(), stop() 
+- 쓰레드의 실행을 일시정지, 재개, 완전정지 시킨다.
+```
+void suspend() : 쓰레드를 일시정지 시킨다
+void resume() : suspend()에 의해 일시정지된 쓰레드를 실행대기상태로 만든다.
+void stop() : 쓰레드를 즉시 종료시킨다.
+```
+- resume()과 suspend()는 완전 반대되는 메서드이다.
+- 실행순서
+  1) 쓰레드를 생성한 다음 start()를 호출하면 줄서기를 한다.
+  2) 줄서기를 하다가 자기 차례가 되면 실행을한다
+  3) 그러다가 자기 작업이 끝나거나 stop() 메서드 호출되면 쓰레드가 정지되고 소멸하게 된다
+  4) 근데 실행하다가 작업을 못맞추면 다시 뒤로가서 줄을 선다
+  5) 근데 실행 중에 suspend()라는 메서드를 호출하면 waiting(일시정지)상태가 된다 
+  6) 그때 resume()이라는 메서드를 호출하면 일시정지 상태에서 벗어나서 다시 줄서기를하여 실행을 계속하게된다.
+- suspend(), resume(), stop()은 교착상태에 빠지기 쉬워서 deprecated되었다.
+
+## 14. join()
+- 지정된 시간동안 특정 쓰레드가 작업하는 것을 기다린다.
+```
+void join()       //  작업이 모두 끝날 때까지
+void join(long millis)    //  천분의 일초 동안
+void join(long millis, int nanos)   //  천분의 일초 + 나노초 동안
+```
+- 예외처리를 해야한다(InterruptedException이 발생하면 작업 재개) : sleep() 처럼 interrupt()에 의해 대기상태에서 벗어날 수 있어서 try-catch문으로 감싸줘야한다.
+- sleep과 다른점은 join은 static메서드가 아니기 때문에 특정 쓰레드에 대해 동작한다는 것이다.
+- ex)garbage collection 실행전에 join()을 넣어 먼저 실행을시킨다.
+
+## 15. yield()
+- 남은 시간을 다음 쓰레드에게 양보하고, 자신(현재  쓰레드)은 실행대기한다.
+- yield()도 static 메서드 자기 자신한테만 사용 가능
+- yield()와 interrupt()를 적절히 사용하면, 응답성과 효율을 높일 수 있다.
+- OS스케줄러한테 그냥 알려주는 통보기능임 그래서 반드시 yield()가 동작한다는 보장이없음 스케줄러 마음임 
