@@ -181,4 +181,18 @@ void join(long millis, int nanos)   //  천분의 일초 + 나노초 동안
 - 은행의 입출금에 주로 쓰인다.
 - synchronized를 쓰는 경우 한 쓰레드가 lock을 오래 쥐는 일이 발생할 수 있는데 이때 wait()와 notify()를 사용하면 한 쓰레드가 lock을 오래 쥐는 일이 없어져 효율적으로 된다.
 - wait()와 notify()는 불분명해서 누구한테 wait을 보내고 notify를 날릴지 구분이 안됨 그거를 해결하기 위해 나온것이 lock & condition
-- 
+
+## 18. Lock과 Condition을 이용한 동기화
+- void lock()
+- void unlock()
+- boolean isLocked()
+- void await() - void wait()
+- void signal() - void notify()
+
+## 19. volatile
+- 코어가 변수의 값을 읽어올 때 캐시가 아닌 메모리에서 읽어오기 때문에 캐시와 메모리간의 값의 불일치가 해결된다.
+
+## 20. for & join 프레임웍
+- compute() : 작업의 size를 반으로 나눈다 계속해서 반으로 나눈다
+- fork() : compute()로 나눌때 한쪽에서는 나눠진 것을 fork()로 작업 큐에 저장한다
+- join() : 해당 작업의 수행이 끝날 때까지 기다렸다가, 수행이 끝나면 그 결과를 반환한다.
