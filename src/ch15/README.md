@@ -78,4 +78,34 @@
 
 - InputStreamReader와 OutputStreamWriter
   1) 바이트기반 스트림을 문자기반 스트림으로 연결시켜준다 그리고 바이트기반 스트림의 데이터를 지정된 인코딩의 문자데이터로 변환하는 작업을 수행한다.
-  2) 
+
+### 5. 표준입출력과 File
+- 표준입출력 - System.in, System.out, System.err
+  1) System.in : 콘솔로부터 데이터를 입력받는데 사용
+  2) System.out : 콘솔로부터 데이터를 출력하는데 사용
+  3) System.err : 콘솔로부터 데이터를 출력하는데 사용
+
+- 표준입출력의 대상변경 - setOut(), setErr(), setln()
+  1) static void setOut(PrintStream out) : System.out의 출력을 지정된 PrintStream으로 변경
+  2) static void setErr(PrintStream err) : System.err의 출력을 지정한 PrintStream으로 변경
+  3) static void setIn(PrintStream in)   : System.in의 입력을 지정한 InputStream으로 변경
+
+- RandomAccessFile
+  1) 하나의 클래스로 파일에 대한 입력과 출력을 모두 할 수 있다
+  2) DataInput인터페이스와 DataOutput인터페이스를 모두 구현
+  
+### 6. File 
+- 기본적이면서 가장 많이 사용되는 입출력 대상
+
+### 7. 직렬화
+- 객체를 컴퓨터에 저장했다가 다음에 다시 꺼내 쓸 수 있게해주는 것
+- 직렬화란
+  - 객체를 데이터 스트림으로 만드는 것(객체에 저장된 스트림을 쓰기(write)위해 연속적인(serial) 데이터로 변환하는 것)
+
+- ObjectInputStream, ObjectOutputStream
+  1) 직렬화 : ObjectInputStream
+  2) 역직렬화 : ObjectOutputStream
+
+- 직렬화가 가능한 클래스 만들기 - Serializeable, transient
+  1) 직렬화하고자 하는 클래스가 java.io.Serializable인터페이스를 구현하도록 하면된다.
+  2) transient를 붙여서 직렬화 대상에서 제외되도록 할 수 있다.
